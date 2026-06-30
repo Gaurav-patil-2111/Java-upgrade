@@ -76,6 +76,49 @@ If `uncovered_issues.md` does not already exist, create it:
 - [ ] New rule/behavior to add: ...
 ```
 
+### 0.5 — Verify Local Environment (Before Making Any Changes)
+
+Before modifying any code, verify that the application builds and runs correctly in its **current state**. This establishes a baseline — if something breaks later, you know it was your change, not a pre-existing issue.
+
+**1. Check Prerequisites:**
+- Read Section **18B (Local Development & Runtime)** from `decisions.md` for all commands and config.
+- Verify the JDK version is installed: run `java -version`.
+- Verify the build tool is available: run `mvn --version` or `gradle --version` (or check for wrappers `./mvnw`, `./gradlew`).
+- Check that required environment variables are set (from row L.8 in decisions.md). If missing, ask the user.
+
+**2. Verify Local Services (user's responsibility):**
+- The agent does NOT start local services (no Docker commands, no container management).
+- Ask the user: *"Are all required local services running (database, cache, message broker, etc.)? The agent cannot start these — please confirm they are ready."*
+- If services are not available and tests require them, ask the user to start them or confirm that tests can run with embedded/mocked alternatives.
+
+**3. Baseline Build:**
+- Run the **build command** (row L.1): e.g., `./mvnw clean package -DskipTests`
+- If the build fails in the current state, **STOP** — do not proceed. Log the failure and ask the user. The project must build before you start changing things.
+
+**4. Baseline Test:**
+- Run the **test command** (row L.3): e.g., `./mvnw test`
+- Note how many tests pass/fail/skip. This is your baseline.
+- If tests fail in the current state, log the failures but **continue** — existing test failures are not your problem, but you must not make them worse.
+
+**5. Baseline Run (optional, if needed for validation):**
+- Run the **run command** (row L.2): e.g., `./mvnw spring-boot:run`
+- Wait for the **startup log pattern** (row L.20): e.g., `Started Application in X seconds`
+- Hit the **health check URL** (row L.17): e.g., `curl http://localhost:8080/actuator/health`
+- Once verified, stop the application (Ctrl+C / kill the process).
+- If the app fails to start, log it in `uncovered_issues.md` and ask the user — some projects may not be runnable locally.
+
+**6. Record the Baseline:**
+Add a baseline section to `migration_plan.md`:
+```
+## Baseline (Before Migration)
+- **Build:** ✅ pass / ❌ fail
+- **Tests:** X passed, Y failed, Z skipped
+- **App starts:** ✅ yes / ❌ no / ⚠️ not tested
+- **Health check:** ✅ pass / ❌ fail / ⚠️ not applicable
+```
+
+> **Important:** After each change during execution, compare against this baseline. If a previously-passing test now fails, your change caused it — fix it before moving on.
+
 ---
 
 ## Step 1 — Execute Tasks
@@ -102,7 +145,7 @@ Execute tasks continuously without stopping, EXCEPT when:
 - **Blocker encountered** — Something prevents the task from being completed (compile error you can't resolve, missing credentials, unclear requirement). Stop, log it in `uncovered_issues.md`, and ask the user.
 - **Destructive action** — Any action that could delete data, drop tables, remove files, or break production. Stop and ask for explicit confirmation.
 - **Ambiguous decision** — Multiple valid approaches and the plan doesn't specify which one. Stop and ask.
-- **Test failure** — If a build or test fails after a change and you can't fix it within 2 attempts. Stop and ask.
+- **Test failure** — If a build or test fails after a change and you can't fix it within 3 attempts. Stop and ask.
 - **Context exhaustion** — You're running low on context. Stop and write a handoff summary.
 
 In autopilot mode:
