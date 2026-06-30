@@ -315,6 +315,54 @@ Determine the correct migration order by listing modules from **leaf (no interna
 
 ---
 
+## 18B. Local Development & Runtime
+
+> How to build, run, and test the application locally. This section is critical for the Implementor agent to validate changes.
+
+### Build & Run Commands
+
+| # | Input / Component | Current Values | Planned Actions / Target State |
+| :--- | :--- | :--- | :--- |
+| L.1 | **Build Command** (e.g., `./mvnw clean package`, `./gradlew build`, `mvn compile`) | | |
+| L.2 | **Run Command** (e.g., `./mvnw spring-boot:run`, `java -jar target/app.jar`, `./gradlew bootRun`) | | |
+| L.3 | **Test Command** (e.g., `./mvnw test`, `./gradlew test`, `mvn verify`) | | |
+| L.4 | **Lint / Check Command** (e.g., `./mvnw checkstyle:check`, `./gradlew spotlessCheck`) | | |
+| L.5 | **Clean Command** (e.g., `./mvnw clean`, `./gradlew clean`) | | |
+
+### Prerequisites & Local Environment
+
+| # | Input / Component | Current Values | Planned Actions / Target State |
+| :--- | :--- | :--- | :--- |
+| L.6 | **Required JDK Installed Locally?** (Version & path, e.g., `JAVA_HOME=/usr/lib/jvm/java-17`) | | |
+| L.7 | **Build Tool Installed Locally?** (Maven/Gradle version, or using wrapper?) | | |
+| L.8 | **Environment Variables Required** (List all env vars needed to run locally, e.g., `DB_URL`, `API_KEY`) | | |
+| L.9 | **Local Config Profile** (e.g., `application-local.yml`, `application-dev.properties`) | | |
+| L.10 | **Required Ports** (e.g., App: 8080, DB: 5432, Redis: 6379 — check for conflicts) | | |
+
+### Local Services & Dependencies (User-Managed)
+
+> The agent does NOT start or manage local services. These must be running before the agent begins execution.
+
+| # | Input / Component | Current Values | Planned Actions / Target State |
+| :--- | :--- | :--- | :--- |
+| L.11 | **Database Setup** (Embedded H2? Locally installed DB? Cloud SQL proxy? How does the user start it?) | | |
+| L.12 | **Message Broker Setup** (Locally installed Kafka/RabbitMQ? Embedded? How does the user start it?) | | |
+| L.13 | **Cache Setup** (Locally installed Redis? Embedded cache? How does the user start it?) | | |
+| L.14 | **GCP Emulators** (Pub/Sub, Datastore, Firestore, Spanner emulators? How does the user start them?) | | |
+| L.15 | **Other Local Services** (Elasticsearch, SMTP server, mock APIs, etc.) | | |
+| L.16 | **What must the user start manually before the agent runs?** (List everything) | | |
+
+### Smoke Test / Health Check
+
+| # | Input / Component | Current Values | Planned Actions / Target State |
+| :--- | :--- | :--- | :--- |
+| L.17 | **Health Check URL** (e.g., `http://localhost:8080/actuator/health`) | | |
+| L.18 | **Smoke Test Endpoint** (e.g., `curl http://localhost:8080/api/v1/ping`) | | |
+| L.19 | **Expected Startup Time** (e.g., ~15 seconds — know when to worry if it hangs) | | |
+| L.20 | **Startup Log Pattern** (e.g., `Started Application in X seconds` — confirms successful boot) | | |
+
+---
+
 ## 19. Manifests & Configuration Files
 
 | # | File / Config | Present? (Y/N) | Path / Notes |
