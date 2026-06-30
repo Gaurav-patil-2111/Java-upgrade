@@ -81,8 +81,8 @@ Ask the user what they want to accomplish. Use the `ask_question` tool with comm
 
 **Common goals to present (multi-select — user may want to combine):**
 
-- **Java Version Upgrade** (e.g., Java 8 → 17, Java 11 → 21)
-- **Framework Upgrade** (e.g., Spring Boot 2.x → 3.x)
+- **Java Version Upgrade** (e.g., Java 8 → 17, Java 11 → 21, Java 17 → 25)
+- **Framework Upgrade** (e.g., Spring Boot 2.x → 3.x, Spring Boot 3.x → 4.x)
 - **Framework Migration** (e.g., Spring MVC → Spring Boot, Jakarta EE → Spring Boot, or reverse)
 - **Build Tool Migration** (e.g., Maven → Gradle, Ant → Maven)
 - **Database Migration** (e.g., Oracle → PostgreSQL, MySQL → PostgreSQL)
@@ -107,7 +107,6 @@ For each goal the user selects, ask targeted follow-up questions:
 - What is the target JDK version?
 - Are you aware of any deprecated APIs currently used? (agent should scan for these)
 - Do you want to adopt new language features (records, sealed classes, pattern matching, virtual threads)?
-- Timeline constraints?
 
 **For Framework Upgrade / Migration:**
 - What is the target framework and version?
@@ -118,7 +117,6 @@ For each goal the user selects, ask targeted follow-up questions:
 **For Database Migration:**
 - What is the target database engine and version?
 - Is data migration (ETL) needed or just schema + code changes?
-- Downtime constraints?
 
 **For Containerization / Cloud Migration:**
 - Target GCP platform (Cloud Run, GKE, App Engine, Compute Engine)?
@@ -155,14 +153,9 @@ If the project is multi-module, determine the migration approach:
 ### Step 2.3 — Identify Risks, Constraints & Dependencies
 
 Ask about or determine:
-- **Timeline** — Any hard deadlines?
 - **Risk tolerance** — Can we break things temporarily? Is there a staging environment?
-- **Team constraints** — How many developers? Skill level with new stack?
-- **Budget constraints** — Are paid tools/licenses an option?
 - **Backward compatibility** — Must old and new coexist during migration?
 - **Rollback plan** — What happens if the migration fails?
-- **Dependencies** — Are other teams/services affected?
-- **Compliance** — Any regulatory constraints on the change?
 
 ### Step 2.4 — Fill the "Planned Actions / Target State" Column
 
@@ -398,7 +391,7 @@ Generate a `completion_report.md` summarizing:
 - ❌ Never skip confirmation — always present findings and wait for user approval.
 - ❌ Never fill "Planned Actions" before understanding the user's goals.
 - ❌ **Never run any git commands** — no `git add`, `git commit`, `git push`, `git checkout`, `git stash`, or any other git operation. This is strictly forbidden.
-- ❌ **Never hardcode values** — no hardcoded URLs, credentials, ports, IPs, GCP project IDs, paths, database connection strings, or version numbers in source code. Always use config files, environment variables, or parameterized templates.
+- ❌ **Never hardcode values** — no hardcoded secrets.
 - ❌ Never modify source code — the planner only reads and plans, it does not implement.
 
 ### What to ALWAYS Do
